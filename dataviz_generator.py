@@ -8,8 +8,13 @@ import seaborn as sns
 # plot user defined function
 def get_plot(function):
     if function == 'b':
-        boxplot_generator(measurements_df, outliers=False);
-        boxplot_generator(measurements_df);
+        ol = input('Include outliers [y/n]: ')
+        if ol == 'n':
+            boxplot_generator(measurements_df, outliers=False);
+        elif ol == 'y':
+            boxplot_generator(measurements_df);
+        else:
+            print('ERROR:incorrect input \'{}\' - please re-run script.'.format(ol))
     elif function == 'l':
         ol = input('Include outliers [y/n]: ')
         if ol == 'n':
@@ -38,19 +43,21 @@ def add_days_column(dframe):
 def boxplot_generator(dframe, outliers=True): # input dframe(DataFrame), outlier(boolean)
     
     if outliers == False:
-        x = int(input('Enter maximum value (area_mm^2): '))
-        dframe = dframe[dframe['area_mm^2'] <= x]
+        i = int(input('Enter maximum value (area_mm^2): '))
+        dframe = dframe[dframe['area_mm^2'] <= i]
     
     ax = sns.catplot(data=dframe, kind='box', x='day', y='area_mm^2', hue='type', native_scale=True)
        
     if outliers == True:
-        ax.set_axis_labels('Days from Start of Treatment', 'Area (mm^2)')
-        ax.fig.suptitle('Test vs Control with Outliers')
-        plt.savefig('{} figure with outliers.png'.format(last_day), dpi=300)
+        plt.xlabel('Days from Start of Treatment')
+        plt.ylabel('Area (mm^2)')
+        plt.title('Test vs Control with Outliers')
+        plt.savefig('{} boxplot with outliers.png'.format(last_day), dpi=300, bbox_inches='tight')
     else:
-        ax.set_axis_labels('Days from Start of Treatment', 'Area (mm^2)')
-        ax.fig.suptitle('Test vs Control w/o Outliers > {}'.format(x))
-        plt.savefig('{} without outliers > {}'.format(last_day, x), dpi=300)
+        plt.xlabel('Days from Start of Treatment')
+        plt.ylabel('Area (mm^2)')
+        plt.title('Test vs Control w/o Outliers greater than {}'.format(i))
+        plt.savefig('{} boxplot without outliers greater than {}'.format(last_day, i), dpi=300, bbox_inches='tight')
     
     return None
 
@@ -58,8 +65,8 @@ def boxplot_generator(dframe, outliers=True): # input dframe(DataFrame), outlier
 def lineplot_generator(dframe, outliers=True): # input dframe(DataFrame), outlier(boolean)
     
     if outliers == False:
-        x = int(input('Enter maximum value (area_mm^2): '))
-        dframe = dframe[dframe['area_mm^2'] <= x]
+        i = int(input('Enter maximum value (area_mm^2): '))
+        dframe = dframe[dframe['area_mm^2'] <= i]
     
     ax = sns.lineplot(data=dframe, x='day', y='area_mm^2', hue='type')
     
@@ -67,12 +74,12 @@ def lineplot_generator(dframe, outliers=True): # input dframe(DataFrame), outlie
         plt.xlabel('Days from Start of Treatment')
         plt.ylabel('Area (mm^2)')
         plt.title('Test vs Control with Outliers')
-        plt.savefig('{} lineplot with outliers.png'.format(last_day), dpi=300)
+        plt.savefig('{} lineplot with outliers.png'.format(last_day), dpi=300, bbox_inches='tight')
     else:
         plt.xlabel('Days from Start of Treatment')
         plt.ylabel('Area (mm^2)')
-        plt.title('Test vs Control w/o Outliers > {}'.format(x))
-        plt.savefig('{} lineplot without outliers > {}'.format(last_day, x), dpi=300)
+        plt.title('Test vs Control w/o Outliers greater than {}'.format(i))
+        plt.savefig('{} lineplot without outliers greater than {}'.format(last_day, i), dpi=300, bbox_inches='tight')
     
     return None
     
